@@ -5,9 +5,9 @@ import org.testng.annotations.Test;
 import pages.CareersPage;
 import utilities.ConfigReader;
 import utilities.Driver;
-import utilities.ResuableMethods;
+import utilities.ReusableMethods;
 
-public class C02_CareersPage extends ResuableMethods {
+public class C02_CareersPage extends ReusableMethods {
 
     @Test
     public void careersTest(){
@@ -23,7 +23,9 @@ public class C02_CareersPage extends ResuableMethods {
 
         // all QA jobs butonuna tikla
         kontrolTikla(careersPage.allJobBtn);
-        waitForVisibility(careersPage.oneItem,50);
+
+        //20 saniye bekler, firstItem 20 saniye icerisinde gozukmez ise exception firlat
+        Assert.assertTrue(isElementDisplayed(careersPage.firstItem, 20));
 
         // all location filter alanina tikla
         kontrolTikla(careersPage.allLocationFltr);

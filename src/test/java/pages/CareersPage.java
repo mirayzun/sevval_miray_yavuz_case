@@ -25,7 +25,7 @@ public class CareersPage {
     public WebElement allLocationFltr;
 
     @FindBy(xpath ="(//*[@class='position-list-item-wrapper bg-light'])[1]")
-    public WebElement oneItem;
+    public WebElement firstItem;
 
     @FindBy(xpath = "//*[@class='job-location istanbulturkiye']")
     public WebElement selectOptn;

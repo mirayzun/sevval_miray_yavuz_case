@@ -1,6 +1,7 @@
 package utilities;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -13,12 +14,19 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-public class ResuableMethods {
+public class ReusableMethods {
 
     //===============Explicit Wait==============//
-    public static WebElement waitForVisibility(WebElement element, int timeToWaitInSec) {
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeToWaitInSec));
-        return wait.until(ExpectedConditions.visibilityOf(element));
+    public static boolean isElementDisplayed(WebElement element, int timeoutInSec) {
+        try {
+            WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeoutInSec));
+            wait.until(ExpectedConditions.visibilityOf(element));
+            return true;
+        } catch (TimeoutException e) {
+            throw new TimeoutException("The element was not visible within the given time of " + timeoutInSec + " seconds.");
+        } catch (Exception e) {
+            throw new RuntimeException("An unexpected error occurred while waiting for element visibility: " + e.getMessage());
+        }
     }
 
     public static void waitForPageToLoad(long timeOutInSeconds) {
@@ -52,6 +60,7 @@ public class ResuableMethods {
     public void closeModalWithEsc() {
         List<WebElement> modals = Driver.getDriver().findElements(By.cssSelector(".ins-responsive-banner-image"));
 
+        /*
         if (!modals.isEmpty()) {
             WebElement modal = modals.get(0);
 
@@ -61,7 +70,21 @@ public class ResuableMethods {
                         .perform();
 
             }
+        }*/
+
+        if(!modals.isEmpty()) {
+            var driver = Driver.getDriver();
+            for (WebElement modal : modals) {
+                if (modal.isDisplayed()) {
+                    {
+                        new Actions(driver)
+                                .sendKeys(Keys.ESCAPE)
+                                .perform();
+                    }
+                }
+            }
         }
+
     }
     public boolean isElementVisible(WebElement element) {
         closeModalWithEsc();
@@ -73,7 +96,6 @@ public class ResuableMethods {
         }
     }
     public void kontrolTikla(WebElement element){
-
         Assert.assertTrue(element.isDisplayed());
         element.click();
     }
@@ -86,18 +108,25 @@ public class ResuableMethods {
                 "Verification Failed! Expected to find: [" + expectedText + "] but found: [" + actualText + "]");
     }
     public boolean verifyJobPositionsDetails(List<WebElement> positions) {
-        closeModalWithEsc();
+        /*closeModalWithEsc();*/
         if(positions.isEmpty()){
             return false;
         }
 
         for (WebElement job : positions){
+            // position
+            String position= job.findElement(By.xpath("//p[@class='position-title font-weight-bold']"))
+                    .getText();
             // department
             String department=job.findElement(By.xpath("//span[contains(@class,'position-department')]"))
                     .getText();
             // location
             String location= job.findElement(By.xpath("//div[@class='position-location text-large']"))
                     .getText();
+
+            Assert.assertFalse(position.isEmpty());
+            Assert.assertTrue(position.contains("Quality"),"The position title does not contain the word 'Quality'");
+            Assert.assertTrue(position.contains("Assurance"),"The position title does not contain the word 'Assurance'.");
 
             Assert.assertFalse(department.isEmpty());
             Assert.assertEquals(department, "Quality Assurance");

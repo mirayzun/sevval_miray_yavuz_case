@@ -5,9 +5,9 @@ import org.testng.annotations.Test;
 import pages.HomePage;
 import utilities.ConfigReader;
 import utilities.Driver;
-import utilities.ResuableMethods;
+import utilities.ReusableMethods;
 
-public class C01_HomePage extends ResuableMethods {
+public class C01_HomePage extends ReusableMethods {
     @Test
     public void homeTest(){
         HomePage homePage= new HomePage();
