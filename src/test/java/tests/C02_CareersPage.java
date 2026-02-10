@@ -2,6 +2,7 @@ package tests;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import pages.CareersPage;
 import utilities.ConfigReader;
 import utilities.Driver;
@@ -16,7 +17,6 @@ public class C02_CareersPage extends ReusableMethods {
         Driver.getDriver().get(ConfigReader.getProperty("careersURL"));
         waitForPageToLoad(5);
 
-        //*JavascriptExecutor js=(JavascriptExecutor) Driver.getDriver();
 
         // Accept butonuna tikla
         kontrolTikla(careersPage.acceptAllBtn);
@@ -24,7 +24,7 @@ public class C02_CareersPage extends ReusableMethods {
         // all QA jobs butonuna tikla
         kontrolTikla(careersPage.allJobBtn);
 
-        //20 saniye bekler, firstItem 20 saniye icerisinde gozukmez ise exception firlat
+        //20 saniye bekle- firstItem 20 saniye icerisinde gozukmez ise exception firlat
         Assert.assertTrue(isElementDisplayed(careersPage.firstItem, 20));
 
         // all location filter alanina tikla
@@ -39,6 +39,7 @@ public class C02_CareersPage extends ReusableMethods {
         verifyElementContainsText(careersPage.departmentselectOptn,expected);
 
         // ilanları listeye al ve kontrol et
+        isElementVisible(careersPage.wiewBtn);
         Assert.assertTrue(verifyJobPositionsDetails(careersPage.ilanLst));
 
         // wiew buton tikla
@@ -51,6 +52,8 @@ public class C02_CareersPage extends ReusableMethods {
         pageURLCheck();
 
         //driver kapat
+        softAssert.assertAll();
         Driver.quitDriver();
+
     }
 }

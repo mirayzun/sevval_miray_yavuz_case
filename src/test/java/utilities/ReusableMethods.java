@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 public class ReusableMethods {
+    public SoftAssert softAssert= new SoftAssert();
 
     //===============Explicit Wait==============//
     public static boolean isElementDisplayed(WebElement element, int timeoutInSec) {
@@ -96,7 +98,7 @@ public class ReusableMethods {
         }
     }
     public void kontrolTikla(WebElement element){
-        Assert.assertTrue(element.isDisplayed());
+        Assert.assertTrue(element.isDisplayed(),"Element is not visible on the page!");
         element.click();
     }
 
@@ -107,35 +109,39 @@ public class ReusableMethods {
         Assert.assertTrue(actualText.contains(expectedText),
                 "Verification Failed! Expected to find: [" + expectedText + "] but found: [" + actualText + "]");
     }
+
     public boolean verifyJobPositionsDetails(List<WebElement> positions) {
-        /*closeModalWithEsc();*/
+
         if(positions.isEmpty()){
             return false;
         }
 
         for (WebElement job : positions){
             // position
-            String position= job.findElement(By.xpath("//p[@class='position-title font-weight-bold']"))
+            String position= job.findElement(By.xpath(".//p[@class='position-title font-weight-bold']"))
                     .getText();
             // department
-            String department=job.findElement(By.xpath("//span[contains(@class,'position-department')]"))
+            String department=job.findElement(By.xpath(".//span[contains(@class,'position-department')]"))
                     .getText();
             // location
-            String location= job.findElement(By.xpath("//div[@class='position-location text-large']"))
+            String location= job.findElement(By.xpath(".//div[@class='position-location text-large']"))
                     .getText();
 
             Assert.assertFalse(position.isEmpty());
             Assert.assertTrue(position.contains("Quality"),"The position title does not contain the word 'Quality'");
-            Assert.assertTrue(position.contains("Assurance"),"The position title does not contain the word 'Assurance'.");
+            softAssert.assertTrue(position.contains("Assurance"),"The position title does not contain the word 'Assurance'.");
 
             Assert.assertFalse(department.isEmpty());
-            Assert.assertEquals(department, "Quality Assurance");
+            Assert.assertEquals(department, "Quality Assurance","The position department does not contain the word 'Quality Assurance'"+ position);
 
             Assert.assertFalse(location.isEmpty());
-            Assert.assertEquals(location, "Istanbul, Turkiye");
+            Assert.assertEquals(location, "Istanbul, Turkiye","The position location does not contain the word 'Istanbul, Turkiye'");
         }
+
         return true;
+
     }
+
     public void switchToPage() {
         String currentHandle = Driver.getDriver().getWindowHandle();
         Set<String> allHandles = Driver.getDriver().getWindowHandles();

@@ -40,7 +40,7 @@ public class CareersPage {
     public List<WebElement> ilanLst;
     ////div[@id='jobs-list']
 
-    @FindBy(xpath = "//a[@class='btn btn-navy rounded pt-2 pr-5 pb-2 pl-5']")
+    @FindBy(xpath = "(//a[@class='btn btn-navy rounded pt-2 pr-5 pb-2 pl-5'])[2]")
     public WebElement wiewBtn;
 
 
