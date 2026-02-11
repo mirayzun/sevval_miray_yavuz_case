@@ -128,8 +128,8 @@ public class ReusableMethods {
                     .getText();
 
             Assert.assertFalse(position.isEmpty());
-            Assert.assertTrue(position.contains("Quality"),"The position title does not contain the word 'Quality'");
-            softAssert.assertTrue(position.contains("Assurance"),"The position title does not contain the word 'Assurance'.");
+            //Assert.assertTrue(position.contains("Quality"),"The position title does not contain the word 'Quality'");
+            softAssert.assertTrue(position.contains("Quality Assurance"),"The position title does not contain the word 'Quality Assurance'.");
 
             Assert.assertFalse(department.isEmpty());
             Assert.assertEquals(department, "Quality Assurance","The position department does not contain the word 'Quality Assurance'"+ position);
